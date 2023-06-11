@@ -1,0 +1,6 @@
+from .Administrateur import Administrateur
+from .AgentMaintenance import AgentMaintenance
+from .Magasinier import Magasinier
+from .ResponsableChaineProduction import ResponsableChaineProduction
+from .ResponsableMaintenance import ResponsableMaintenance
+from .ResponsableProduction import ResponsableProduction

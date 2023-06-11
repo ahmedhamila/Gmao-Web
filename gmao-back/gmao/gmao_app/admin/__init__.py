@@ -1,0 +1,6 @@
+#from .BonApprovisionnementAdmin import BonApprovisionnementAdmin
+from .BonTravailAdmin import BonTravailAdmin
+from .ChaineProductionAdmin import ChaineProductionAdmin
+from .DemandeInterventionAdmin import DemandeInterventionAdmin
+from .EquipementAdmin import EquipementAdmin
+#from .PieceRechange import PieceRechange
