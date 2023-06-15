@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.Administrateur import Administrateur
+from ..models import Administrateur
 
 class AdministrateurSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(

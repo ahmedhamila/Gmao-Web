@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.ResponsableProduction import ResponsableProduction
+from ..models import ResponsableProduction
 
 class ResponsableProductionSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(

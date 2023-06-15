@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.Magasinier import Magasinier
+from ..models import Magasinier
 
 class MagasinierSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(

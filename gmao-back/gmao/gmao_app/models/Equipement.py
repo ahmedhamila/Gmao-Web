@@ -1,6 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
-from phonenumber_field.modelfields import PhoneNumberField
 from datetime import datetime
 
 
@@ -16,4 +14,4 @@ class Equipement (models.Model):
     class Meta :
         ordering = ['-code']
     def __str__(self):
-       return self.id
+       return str(self.id)

@@ -32,7 +32,7 @@ function App() {
           </ProSidebarProvider>
           <main
             className={cn(
-              "w-full p-2 transition-all duration-200",
+              "w-full p-2 transition-all duration-200 h-full",
               isSidebarCollapsed ? "lg:pl-[5.5rem]" : "lg:pl-[300px]"
             )}
           >

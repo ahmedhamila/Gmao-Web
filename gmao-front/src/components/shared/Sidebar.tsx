@@ -64,7 +64,7 @@ const MenuMagasinier = () => {
     <Menu className="max-h-screen overflow-y-auto">
       <MenuItem
         icon={<CalendarIcon size={20} strokeWidth={2.4} />}
-        component={<Link to="/dashboard" />}
+        component={<Link to="/" />}
       >
         Dashboard
       </MenuItem>
@@ -112,7 +112,7 @@ const MenuAdministrateur = () => {
     <Menu className="max-h-screen overflow-y-auto">
       <MenuItem
         icon={<CalendarIcon size={20} strokeWidth={2.4} />}
-        component={<Link to="/dashboard" />}
+        component={<Link to="/" />}
       >
         Dashboard
       </MenuItem>
@@ -367,7 +367,9 @@ const MenuResponsableMaintenance = () => {
 };
 
 const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
-  const { userType,first_name,last_name,image,mail } = useSelector((state) => state.user);
+  const { userType, first_name, last_name, image, mail } = useSelector(
+    (state) => state.user
+  );
   const { toggleSidebar } = useProSidebar();
   const size: Size = useWindowSize();
   const navigate = useNavigate();
@@ -406,7 +408,7 @@ const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <div className="text-sm font-semibold text-slate-900">
-                    {last_name+" "+first_name}
+                    {last_name + " " + first_name}
                   </div>
                 </div>
                 <ChevronDownIcon className="text-slate-700" size={16} />
@@ -510,11 +512,9 @@ const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
                     {!isCollapsed && (
                       <div className="flex flex-col">
                         <div className="text-sm font-semibold text-slate-900">
-                          {last_name+" "+first_name}
+                          {last_name + " " + first_name}
                         </div>
-                        <p className="text-xs text-slate-400">
-                          {mail}
-                        </p>
+                        <p className="text-xs text-slate-400">{mail}</p>
                       </div>
                     )}
                   </div>

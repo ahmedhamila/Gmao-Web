@@ -13,4 +13,4 @@ class ChaineProduction (models.Model):
     class Meta :
         ordering = ['-reference']
     def __str__(self):
-       return self.id
+       return str(self.id)

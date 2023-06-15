@@ -1,0 +1,6 @@
+from .BonApprovisionnementSerializer import BonApprovisionnementSerializer
+from .BonTravailSerializer import BonTravailSerializer
+from .ChaineProductionSerializer import ChaineProductionSerializer
+from .DemandeInterventionSerializer import DemandeInterventionSerializer
+from .EquipementSerializer import EquipementSerializer
+from .PieceRechangeSerializer import PieceRechangeSerializer

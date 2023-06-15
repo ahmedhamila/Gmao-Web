@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.AgentMaintenance import AgentMaintenance
+from ..models import AgentMaintenance
 
 class AgentMaintenanceSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
