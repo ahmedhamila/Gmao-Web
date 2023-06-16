@@ -385,6 +385,7 @@ const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
   const handleLogOut = () => {
     localStorage.removeItem("Token");
     notify(false, "Logged Out");
+    navigate("/");
     navigate(0);
   };
 

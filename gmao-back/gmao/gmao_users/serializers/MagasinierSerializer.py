@@ -12,7 +12,7 @@ class MagasinierSerializer(serializers.ModelSerializer):
     #registered_courses = CoursSerializer("registered_courses",many=True,read_only=True)
     class Meta:
         model=Magasinier
-        fields=["id","first_name","last_name","date_of_birth","mail","phone_number","image","user"]
+        fields=["id","mail","first_name","last_name","date_of_birth","phone_number","image","user"]
         depth = 1
         #read_only_fields = ('registered_courses', )
         #extra_kwargs = {'registered_courses': {'read_only': True},}

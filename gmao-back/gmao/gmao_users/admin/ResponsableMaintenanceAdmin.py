@@ -5,5 +5,5 @@ from ..models import ResponsableMaintenance
 @admin.register(ResponsableMaintenance)
 class ResponsableMaintenanceAdmin(admin.ModelAdmin):
 
-    list_display = ('first_name','last_name')
+    list_display = ('id','first_name','last_name')
     list_filter = ('first_name',)

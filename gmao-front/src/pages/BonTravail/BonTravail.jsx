@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { SERVER_API_CONFIG } from "./../../Configurations";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Button } from "@/components/ui/Button";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
+import { Image } from "mui-image";
+import imageUrl from "@/assets/bon-travail.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import BonTravailPopup from "./BonTravailPopup";
-
+import AddBonTravailPopup from "./AddBonTravailPopup";
+import { useSelector } from "react-redux";
 const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
 
 export default function BonTravail() {
   const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [addPopupOpen, setAddPopupOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -32,10 +35,16 @@ export default function BonTravail() {
     try {
       const response = await fetch(`${URL}/gmao/BonTravail`);
       const data = await response.json();
+      console.log(data);
       setRows(data);
     } catch (error) {
       notify(true, "Error fetching data !");
     }
+  };
+
+  const handleAddBonTravail = (newBonTravail) => {
+    // Update the bonTravaux state by adding the new bon de travail
+    setRows((prevBonTravaux) => [...prevBonTravaux, newBonTravail]);
   };
 
   const handleUpdateRecord = (BonTravailId, updatedData) => {
@@ -100,6 +109,14 @@ export default function BonTravail() {
   const handleSelectionModelChange = (params) => {
     console.log(params);
     setSelectedRows(params);
+  };
+
+  const handleOpenDialog = () => {
+    setAddPopupOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setAddPopupOpen(false);
   };
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -174,6 +191,42 @@ export default function BonTravail() {
         container
         display="flex"
         alignItems="center"
+        flexWrap="nowrap"
+        sx={{ marginBottom: "50px" }}
+      >
+        <Grid
+          container
+          display={{ sm: "none", lg: "flex" }}
+          justifyContent="center"
+        >
+          <Image
+            src={imageUrl}
+            alt="Industrial Bon de Travail"
+            height="80%"
+            width="80%"
+            style={{ borderRadius: 16 }}
+          />
+        </Grid>
+        <Grid container display="flex" flexDirection="column" gap="25px">
+          <Typography variant="body1">
+            A Bon de Travail, also known as a Work Order, is a document used to
+            initiate and track maintenance or repair tasks in an industrial
+            setting. It serves as a formal request to fix or maintain equipment
+            or machinery within a production cycle. The Bon de Travail contains
+            essential information such as the responsible maintenance personnel,
+            equipment details, description of the task, expected completion
+            date, and status. It plays a crucial role in ensuring the smooth
+            operation and efficiency of the production process.
+          </Typography>
+          <Button style={{ width: "100%" }} onClick={handleOpenDialog}>
+            Add Bon Travail
+          </Button>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        display="flex"
+        alignItems="center"
         justifyContent="center"
       >
         <DataGrid
@@ -198,6 +251,11 @@ export default function BonTravail() {
         isModification={isEditMode}
         onUpdateRecord={handleUpdateRecord}
         onClose={() => setPopupOpen(false)}
+      />
+      <AddBonTravailPopup
+        open={addPopupOpen}
+        onClose={handleCloseDialog}
+        onAddBonTravail={handleAddBonTravail}
       />
       <Toaster />
     </Grid>

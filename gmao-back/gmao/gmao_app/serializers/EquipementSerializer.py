@@ -5,6 +5,6 @@ class EquipementSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=Equipement
-        fields=["code","date_fabrication","date_mise_en_marche","type"]
+        fields=["id","code","date_fabrication","date_mise_en_marche","type"]
         depth = 1
     

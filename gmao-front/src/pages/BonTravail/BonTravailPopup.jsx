@@ -13,13 +13,18 @@ import {
   TableRow,
   Paper,
   TextField,
+  Select,
+  MenuItem,
+  Checkbox,
 } from "@mui/material";
 import { Image } from "mui-image";
 import imageUrl from "@/assets/bon-travail.jpg";
 import { Button } from "@/components/ui/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { SERVER_API_CONFIG } from "./../../Configurations";
+
 const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
+
 const BonTravailPopup = ({
   rowData,
   open,
@@ -28,12 +33,53 @@ const BonTravailPopup = ({
   onUpdateRecord,
 }) => {
   const [modifiedData, setModifiedData] = useState({});
+  const [agentMaintenanceOptions, setAgentMaintenanceOptions] = useState([]);
+  const [equipementOptions, setEquipementOptions] = useState([]);
+  const [demandeInterventionOptions, setDemandeInterventionOptions] = useState(
+    []
+  );
+
   const notify = (error, msg) => {
     if (error) toast.error(msg);
     else toast.success(msg);
   };
+
+  const fetchAgentMaintenanceOptions = async () => {
+    const response = await fetch(`${URL}/users/AgentMaintenance`);
+    if (response.ok) {
+      const data = await response.json();
+      setAgentMaintenanceOptions(data);
+    } else {
+      notify(true, "Failed to fetch agent maintenance options");
+    }
+  };
+
+  const fetchEquipementOptions = async () => {
+    const response = await fetch(`${URL}/gmao/Equipement`);
+    if (response.ok) {
+      const data = await response.json();
+      setEquipementOptions(data);
+    } else {
+      notify(true, "Failed to fetch equipment options");
+    }
+  };
+
+  const fetchDemandeInterventionOptions = async () => {
+    const response = await fetch(`${URL}/gmao/DemandeIntervention`);
+    if (response.ok) {
+      const data = await response.json();
+      setDemandeInterventionOptions(data);
+    } else {
+      notify(true, "Failed to fetch demande intervention options");
+    }
+  };
+
   useEffect(() => {
+    fetchAgentMaintenanceOptions();
+    fetchEquipementOptions();
+    fetchDemandeInterventionOptions();
     setModifiedData(rowData);
+    console.log(modifiedData);
   }, [rowData]);
 
   const handleFieldChange = (field, value) => {
@@ -83,8 +129,188 @@ const BonTravailPopup = ({
             </Typography>
             <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
               <Table>
-                <TableBody>
-                  {Object.keys(rowData).map(
+                {isModification ? (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        agent_maintenance
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={
+                            agentMaintenanceOptions.find(
+                              (option) =>
+                                option.mail === rowData.agent_maintenance
+                            )?.id || ""
+                          }
+                          onChange={(e) =>
+                            handleFieldChange(
+                              "agent_maintenance",
+                              e.target.value
+                            )
+                          }
+                          sx={{ width: "100%" }}
+                        >
+                          {agentMaintenanceOptions.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                              {option.mail}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        equipement
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={modifiedData.equipement || ""}
+                          onChange={(e) =>
+                            handleFieldChange("equipement", e.target.value)
+                          }
+                          sx={{ width: "100%" }}
+                        >
+                          {equipementOptions.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                              {option.code}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        refDIM
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={modifiedData.refDIM || ""}
+                          onChange={(e) =>
+                            handleFieldChange("refDIM", e.target.value)
+                          }
+                          sx={{ width: "100%" }}
+                        >
+                          {demandeInterventionOptions.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                              {option.responsable_maintenance +
+                                "(" +
+                                option.id +
+                                ")"}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        description
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          value={modifiedData.description || ""}
+                          onChange={(e) =>
+                            handleFieldChange("description", e.target.value)
+                          }
+                          sx={{ width: "100%" }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        section
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          value={modifiedData.section || ""}
+                          onChange={(e) =>
+                            handleFieldChange("section", e.target.value)
+                          }
+                          sx={{ width: "100%" }}
+                        />
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        type
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={modifiedData.type || ""}
+                          onChange={(e) =>
+                            handleFieldChange("type", e.target.value)
+                          }
+                          sx={{ width: "100%" }}
+                        >
+                          <MenuItem value="CO">Correctif</MenuItem>
+                          <MenuItem value="PR">Preventif</MenuItem>
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        frequence
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          type="number"
+                          value={modifiedData.frequence || 0}
+                          onChange={(e) =>
+                            handleFieldChange("frequence", e.target.value)
+                          }
+                          sx={{ width: "100%" }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        active
+                      </TableCell>
+                      <TableCell>
+                        <Checkbox
+                          checked={modifiedData.active}
+                          onChange={(e) =>
+                            handleFieldChange("active", e.target.checked)
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                ) : (
+                  Object.keys(rowData).map(
                     (field, index) =>
                       index !== 0 && (
                         <TableRow key={field}>
@@ -95,22 +321,11 @@ const BonTravailPopup = ({
                           >
                             {field}
                           </TableCell>
-                          {isModification ? (
-                            <TableCell>
-                              <TextField
-                                value={modifiedData[field] || ""}
-                                onChange={(e) =>
-                                  handleFieldChange(field, e.target.value)
-                                }
-                              />
-                            </TableCell>
-                          ) : (
-                            <TableCell>{rowData[field]}</TableCell>
-                          )}
+                          <TableCell>{rowData[field]}</TableCell>
                         </TableRow>
                       )
-                  )}
-                </TableBody>
+                  )
+                )}
               </Table>
             </TableContainer>
           </Grid>

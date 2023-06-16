@@ -15,6 +15,6 @@ class DemandeInterventionSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=DemandeIntervention
-        fields=["description","section","date_liberation","motif","status","equipement","responsable_maintenance"]
+        fields=["id","responsable_chaine_production","responsable_maintenance","equipement","description","section","date_liberation","motif","status"]
         depth = 1
     

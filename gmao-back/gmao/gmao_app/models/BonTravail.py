@@ -14,7 +14,7 @@ class BonTravail (models.Model):
     refDIM=models.OneToOneField(DemandeIntervention,on_delete=models.CASCADE,null=False,default=None)
     description = models.TextField( help_text='Description de l BonTravail')
     section = models.CharField(max_length=5, null=False, blank=True, help_text='section de l BonTravail')
-    date_liberation = models.DateField(null=False, blank=True,default=datetime.now(), help_text='Date de liberation de l BonTravail')
+    date_liberation = models.DateTimeField(null=True, blank=True,default=datetime.now(), help_text='Date de liberation de l BonTravail')
     class TypeBon(models.TextChoices):
         CORRECTIF = 'CO', ('Correctif')
         PREVENTIF = 'PR', ('Preventif')
