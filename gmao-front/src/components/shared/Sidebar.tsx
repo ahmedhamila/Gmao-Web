@@ -365,6 +365,69 @@ const MenuResponsableMaintenance = () => {
     </Menu>
   );
 };
+const MenuAgentMaintenance = () => {
+  return (
+    <Menu className="max-h-screen overflow-y-auto">
+      <MenuItem
+        icon={<CalendarIcon size={20} strokeWidth={2.4} />}
+        component={<Link to="/dashboard" />}
+      >
+        Dashboard
+      </MenuItem>
+      <Separator />
+      {/* Mainttenance*/}
+      <SubMenu
+        label="Maintenance"
+        icon={<CalendarDaysIcon size={20} strokeWidth={2.4} />}
+        className="rounded-full text-xs font-semibold text-slate-700"
+      >
+        <MenuItem
+          icon={<CalendarIcon size={20} strokeWidth={2.4} />}
+          component={<Link to="/maintenance/bon-travail" />}
+        >
+          Bon de travail
+        </MenuItem>
+      </SubMenu>
+      {/* /Mainttenance */}
+      <Separator />
+      {/* Notification */}
+      <SubMenu
+        label="Notifications"
+        icon={<BinaryIcon size={20} strokeWidth={2.4} />}
+        className="rounded-full text-xs font-semibold text-slate-700"
+      >
+        <MenuItem
+          icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={""} />}
+        >
+          Demande de travail
+        </MenuItem>
+      </SubMenu>
+      {/* /Notification */}
+      <Separator />
+      {/* Equipements */}
+      <SubMenu
+        label="Equipements"
+        icon={<ShoppingCartIcon size={20} strokeWidth={2.4} />}
+        className="rounded-full text-xs font-semibold text-slate-700"
+      >
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={""} />}
+        >
+          Liste Equipements
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={""} />}
+        >
+          Demande d'approvisionnement
+        </MenuItem>
+      </SubMenu>
+      {/* /Equipements */}
+    </Menu>
+  );
+};
 
 const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
   const { userType, first_name, last_name, image, mail } = useSelector(
@@ -384,6 +447,7 @@ const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
   }, [size.width, CollapseSidebar]);
   const handleLogOut = () => {
     localStorage.removeItem("Token");
+    localStorage.removeItem("UserType");
     notify(false, "Logged Out");
     navigate("/");
     navigate(0);
@@ -461,6 +525,7 @@ const Sidebar = ({ isCollapsed, CollapseSidebar }: SidebarProps) => {
               {userType === "ResponsableMaintenance" && (
                 <MenuResponsableMaintenance />
               )}
+              {userType === "AgentMaintenance" && <MenuAgentMaintenance />}
               {userType === "ResponsableChaineProduction" && (
                 <MenuResponsableChaineProduction />
               )}

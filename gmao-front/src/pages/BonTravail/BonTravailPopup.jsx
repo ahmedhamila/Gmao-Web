@@ -22,7 +22,7 @@ import imageUrl from "@/assets/bon-travail.jpg";
 import { Button } from "@/components/ui/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { SERVER_API_CONFIG } from "./../../Configurations";
-
+import { useSelector } from "react-redux";
 const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
 
 const BonTravailPopup = ({
@@ -38,7 +38,7 @@ const BonTravailPopup = ({
   const [demandeInterventionOptions, setDemandeInterventionOptions] = useState(
     []
   );
-
+  const { id } = useSelector((state) => state.user);
   const notify = (error, msg) => {
     if (error) toast.error(msg);
     else toast.success(msg);
@@ -78,11 +78,12 @@ const BonTravailPopup = ({
     fetchAgentMaintenanceOptions();
     fetchEquipementOptions();
     fetchDemandeInterventionOptions();
+    console.log("RowData", rowData);
     setModifiedData(rowData);
-    console.log(modifiedData);
   }, [rowData]);
 
   const handleFieldChange = (field, value) => {
+    console.log("Modif", field, value);
     setModifiedData((prevData) => ({
       ...prevData,
       [field]: value,
@@ -95,7 +96,7 @@ const BonTravailPopup = ({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedData),
+      body: JSON.stringify({ ...updatedData, responsable_maintenance: id }),
     });
 
     if (response.ok) {
@@ -141,12 +142,7 @@ const BonTravailPopup = ({
                       </TableCell>
                       <TableCell>
                         <Select
-                          value={
-                            agentMaintenanceOptions.find(
-                              (option) =>
-                                option.mail === rowData.agent_maintenance
-                            )?.id || ""
-                          }
+                          value={modifiedData.agent_maintenance}
                           onChange={(e) =>
                             handleFieldChange(
                               "agent_maintenance",

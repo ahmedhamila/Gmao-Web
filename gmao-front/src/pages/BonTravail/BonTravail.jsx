@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { SERVER_API_CONFIG } from "./../../Configurations";
 import { Grid, Typography } from "@mui/material";
@@ -15,7 +15,7 @@ import AddBonTravailPopup from "./AddBonTravailPopup";
 import { useSelector } from "react-redux";
 const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
 
-export default function BonTravail() {
+export default function BonTravail({ editMode }) {
   const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -36,6 +36,7 @@ export default function BonTravail() {
       const response = await fetch(`${URL}/gmao/BonTravail`);
       const data = await response.json();
       console.log(data);
+      //UserType filter
       setRows(data);
     } catch (error) {
       notify(true, "Error fetching data !");
@@ -141,18 +142,22 @@ export default function BonTravail() {
           <IconButton aria-label="viex" onClick={() => handleView(params.row)}>
             <VisibilityIcon />
           </IconButton>
-          <IconButton
-            aria-label="edit"
-            onClick={() => handleModify(params.row)}
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            aria-label="delete"
-            onClick={() => handleDelete(params.row.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
+          {editMode && (
+            <Fragment>
+              <IconButton
+                aria-label="edit"
+                onClick={() => handleModify(params.row)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                aria-label="delete"
+                onClick={() => handleDelete(params.row.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Fragment>
+          )}
         </Grid>
       ),
     },
@@ -218,9 +223,11 @@ export default function BonTravail() {
             date, and status. It plays a crucial role in ensuring the smooth
             operation and efficiency of the production process.
           </Typography>
-          <Button style={{ width: "100%" }} onClick={handleOpenDialog}>
-            Add Bon Travail
-          </Button>
+          {editMode && (
+            <Button style={{ width: "100%" }} onClick={handleOpenDialog}>
+              Add Bon Travail
+            </Button>
+          )}
         </Grid>
       </Grid>
       <Grid
@@ -233,10 +240,12 @@ export default function BonTravail() {
           rows={rows}
           columns={columns}
           disableSelectionOnClick
-          components={{
-            Footer: CustomFooter,
-            Toolbar: GridToolbar,
-          }}
+          components={
+            editMode && {
+              Footer: CustomFooter,
+              Toolbar: GridToolbar,
+            }
+          }
           pageSize={5}
           checkboxSelection
           onGridReady={(params) => {

@@ -17,6 +17,7 @@ function App() {
   if (data) {
     console.log(data);
     dispatch(updateCredentials(data))
+    localStorage.setItem('UserType',data.UserType)
   }
   return (
     <Fragment>
