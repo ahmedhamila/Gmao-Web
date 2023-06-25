@@ -5,6 +5,5 @@ class PieceRechangeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=PieceRechange
-        fields=["code","date_fabrication","date_mise_en_marche","type"]
-        depth = 1
+        fields='__all__'
     

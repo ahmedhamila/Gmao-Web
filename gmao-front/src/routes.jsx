@@ -5,8 +5,12 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import BonTravail from "./pages/BonTravail/BonTravail";
 import Login from "./pages/Login/Login";
 
-const Token = localStorage.getItem("Token");
-const UserType = localStorage.getItem("UserType");
+import { RouterProvider } from "react-router-dom";
+import { useSelector } from "react-redux";
+import DemandeIntervention from "./pages/DemandeIntervention/DemandeIntervention";
+import Equipement from "./pages/Equipement/Equipement";
+import PieceRechange from "./pages/PieceRechange/PieceRechange";
+import BonApprovisionnement from "./pages/BonApprovisionnement/BonApprovisionnement";
 const ResponsableMaintenanceChildren = [
   {
     index: true,
@@ -19,11 +23,28 @@ const ResponsableMaintenanceChildren = [
         path: "bon-travail",
         element: <BonTravail editMode />,
       },
+      {
+        path: "demande-intervention",
+        element: <DemandeIntervention editMode={false} />,
+      },
     ],
   },
   {
-    path: "charge",
-    children: [],
+    path: "equipement",
+    children: [
+      {
+        path: "",
+        element: <Equipement editMode={false} />,
+      },
+      {
+        path: "bon-approvisionnement",
+        element: <BonApprovisionnement editMode />,
+      },
+      {
+        path: "piece-rechange",
+        element: <PieceRechange editMode={false} />,
+      },
+    ],
   },
 ];
 const AgentMaintenanceChildren = [
@@ -40,10 +61,6 @@ const AgentMaintenanceChildren = [
       },
     ],
   },
-  {
-    path: "charge",
-    children: [],
-  },
 ];
 const ResponsableProductionChildren = [
   {
@@ -55,13 +72,30 @@ const ResponsableProductionChildren = [
     children: [
       {
         path: "bon-travail",
-        element: <BonTravail />,
+        element: <BonTravail editMode={false} />,
+      },
+      {
+        path: "demande-intervention",
+        element: <DemandeIntervention editMode={false} />,
       },
     ],
   },
   {
-    path: "charge",
-    children: [],
+    path: "equipement",
+    children: [
+      {
+        path: "",
+        element: <Equipement editMode={false} />,
+      },
+      {
+        path: "bon-approvisionnement",
+        element: <BonApprovisionnement editMode={false} />,
+      },
+      {
+        path: "piece-rechange",
+        element: <PieceRechange editMode={false} />,
+      },
+    ],
   },
 ];
 const ResponsableChaineProductionChildren = [
@@ -73,14 +107,31 @@ const ResponsableChaineProductionChildren = [
     path: "maintenance",
     children: [
       {
+        path: "demande-intervention",
+        element: <DemandeIntervention editMode />,
+      },
+      {
         path: "bon-travail",
-        element: <BonTravail />,
+        element: <BonTravail editMode={false} />,
       },
     ],
   },
   {
-    path: "charge",
-    children: [],
+    path: "equipement",
+    children: [
+      {
+        path: "",
+        element: <Equipement editMode />,
+      },
+      {
+        path: "bon-approvisionnement",
+        element: <BonApprovisionnement editMode={false} />,
+      },
+      {
+        path: "piece-rechange",
+        element: <PieceRechange editMode={false} />,
+      },
+    ],
   },
 ];
 const MagasinierChildren = [
@@ -89,17 +140,21 @@ const MagasinierChildren = [
     element: <Dashboard />,
   },
   {
-    path: "maintenance",
+    path: "equipement",
     children: [
       {
-        path: "bon-travail",
-        element: <BonTravail />,
+        path: "",
+        element: <Equipement editMode />,
+      },
+      {
+        path: "bon-approvisionnement",
+        element: <BonApprovisionnement editMode={false} />,
+      },
+      {
+        path: "piece-rechange",
+        element: <PieceRechange editMode />,
       },
     ],
-  },
-  {
-    path: "charge",
-    children: [],
   },
 ];
 const AdministrateurChildren = [
@@ -112,13 +167,39 @@ const AdministrateurChildren = [
     children: [
       {
         path: "bon-travail",
-        element: <BonTravail />,
+        element: <BonTravail editMode={false} />,
+      },
+      {
+        path: "demande-intervention",
+        element: <DemandeIntervention editMode={false} />,
       },
     ],
   },
   {
-    path: "charge",
-    children: [],
+    path: "equipement",
+    children: [
+      {
+        path: "",
+        element: <Equipement editMode={false} />,
+      },
+      {
+        path: "bon-approvisionnement",
+        element: <BonApprovisionnement editMode={false} />,
+      },
+      {
+        path: "piece-rechange",
+        element: <PieceRechange editMode={false} />,
+      },
+    ],
+  },
+  {
+    path: "users",
+    children: [
+      {
+        path: "",
+        element: <Equipement editMode={false} />,
+      },
+    ],
   },
 ];
 
@@ -148,26 +229,34 @@ const getChildrenByUserType = (UserType) => {
   }
 };
 
-const router = createBrowserRouter(
-  [
-    Token
-      ? {
-          path: "/",
-          element: <App />,
-          errorElement: <ErrorPage />,
-          children: getChildrenByUserType(UserType),
+const Router = () => {
+  const Token = localStorage.getItem("Token");
+  const UserType = localStorage.getItem("UserType");
+  return (
+    <RouterProvider
+      router={createBrowserRouter(
+        [
+          Token
+            ? {
+                path: "/",
+                element: <App />,
+                errorElement: <ErrorPage />,
+                children: getChildrenByUserType(UserType),
+              }
+            : {
+                path: "/",
+                element: <Login />,
+                //errorElement: <ErrorPage />,
+                children: [],
+              },
+        ],
+        {
+          // Todo: remove this when ready to deploy to production
+          basename: "/gmao-front",
         }
-      : {
-          path: "/",
-          element: <Login />,
-          //errorElement: <ErrorPage />,
-          children: [],
-        },
-  ],
-  {
-    // Todo: remove this when ready to deploy to production
-    basename: "/gmao-front",
-  }
-);
+      )}
+    />
+  );
+};
 
-export default router;
+export default Router;

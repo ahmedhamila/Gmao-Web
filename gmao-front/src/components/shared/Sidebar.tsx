@@ -68,21 +68,7 @@ const MenuMagasinier = () => {
       >
         Dashboard
       </MenuItem>
-      <Separator />
-      {/* Notifications */}
-      <SubMenu
-        label="Notifications"
-        icon={<BinaryIcon size={20} strokeWidth={2.4} />}
-        className="rounded-full text-xs font-semibold text-slate-700"
-      >
-        <MenuItem
-          icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
-        >
-          Validation de réception
-        </MenuItem>
-      </SubMenu>
-      {/* /Notifications */}
+
       <Separator />
       {/* Equipements */}
       <SubMenu
@@ -92,15 +78,21 @@ const MenuMagasinier = () => {
       >
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/"} />}
+        >
+          Liste Equipements
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={"/equipement/piece-rechange"} />}
         >
           Liste Piéces de rechanges
         </MenuItem>
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/bon-approvisionnement"} />}
         >
-          Demandes d'approvisionnement
+          Bon d'approvisionnement
         </MenuItem>
       </SubMenu>
       {/* /Equipements */}
@@ -131,7 +123,7 @@ const MenuAdministrateur = () => {
         </MenuItem>
         <MenuItem
           icon={<CalendarIcon size={20} strokeWidth={2.4} />}
-          component={<Link to="/maintenance/bon-travail" />}
+          component={<Link to="/maintenance/demande-intervention" />}
         >
           Demandes d'interventions
         </MenuItem>
@@ -146,7 +138,7 @@ const MenuAdministrateur = () => {
       >
         <MenuItem
           icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/users/"} />}
         >
           Responsables chaines-productions
         </MenuItem>
@@ -161,15 +153,21 @@ const MenuAdministrateur = () => {
       >
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/"} />}
         >
           Liste Equipements
         </MenuItem>
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/bon-approvisionnement"} />}
         >
-          Demandes d'approvisionnement
+          Bon d'approvisionnement
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={"/equipement/piece-rechange"} />}
+        >
+          Liste Piéces de rechanges
         </MenuItem>
       </SubMenu>
       {/* /Equipements */}
@@ -200,27 +198,13 @@ const MenuResponsableProduction = () => {
         </MenuItem>
         <MenuItem
           icon={<CalendarIcon size={20} strokeWidth={2.4} />}
-          component={<Link to="/maintenance/bon-travail" />}
+          component={<Link to="/maintenance/demande-intervention" />}
         >
           Demandes d'interventions
         </MenuItem>
       </SubMenu>
       {/* /Mainttenance */}
-      <Separator />
-      {/* Utilisateurs */}
-      <SubMenu
-        label="Utilisateurs"
-        icon={<BinaryIcon size={20} strokeWidth={2.4} />}
-        className="rounded-full text-xs font-semibold text-slate-700"
-      >
-        <MenuItem
-          icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
-        >
-          Responsables chaines-productions
-        </MenuItem>
-      </SubMenu>
-      {/* /Utilisateurs */}
+
       <Separator />
       {/* Equipements */}
       <SubMenu
@@ -230,15 +214,21 @@ const MenuResponsableProduction = () => {
       >
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/"} />}
         >
           Liste Equipements
         </MenuItem>
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/bon-approvisionnement"} />}
         >
-          Demandes d'approvisionnement
+          Bon d'approvisionnement
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={"/equipement/piece-rechange"} />}
+        >
+          Liste Piéces de rechanges
         </MenuItem>
       </SubMenu>
       {/* /Equipements */}
@@ -263,27 +253,18 @@ const MenuResponsableChaineProduction = () => {
       >
         <MenuItem
           icon={<CalendarIcon size={20} strokeWidth={2.4} />}
-          component={<Link to="/maintenance/bon-travail" />}
+          component={<Link to="/maintenance/demande-intervention" />}
         >
           Demandes d'interventions
         </MenuItem>
-      </SubMenu>
-      {/* /Mainttenance */}
-      <Separator />
-      {/* Notification */}
-      <SubMenu
-        label="Notifications"
-        icon={<BinaryIcon size={20} strokeWidth={2.4} />}
-        className="rounded-full text-xs font-semibold text-slate-700"
-      >
         <MenuItem
-          icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          icon={<CalendarIcon size={20} strokeWidth={2.4} />}
+          component={<Link to="/maintenance/bon-travail" />}
         >
-          Validation de reception
+          Bon de travail
         </MenuItem>
       </SubMenu>
-      {/* /Notification */}
+      {/* /Mainttenance */}
       <Separator />
       {/* Equipements */}
       <SubMenu
@@ -293,9 +274,21 @@ const MenuResponsableChaineProduction = () => {
       >
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/"} />}
         >
           Liste Equipements
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={"/equipement/bon-approvisionnement"} />}
+        >
+          bon d'approvisionnement
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={"/equipement/piece-rechange"} />}
+        >
+          Liste Piéces de rechanges
         </MenuItem>
       </SubMenu>
       {/* /Equipements */}
@@ -324,23 +317,14 @@ const MenuResponsableMaintenance = () => {
         >
           Bon de travail
         </MenuItem>
-      </SubMenu>
-      {/* /Mainttenance */}
-      <Separator />
-      {/* Notification */}
-      <SubMenu
-        label="Notifications"
-        icon={<BinaryIcon size={20} strokeWidth={2.4} />}
-        className="rounded-full text-xs font-semibold text-slate-700"
-      >
         <MenuItem
           icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/maintenance/demande-intervention"} />}
         >
-          Demande de travail
+          Demande d'intervention
         </MenuItem>
       </SubMenu>
-      {/* /Notification */}
+      {/* /Mainttenance */}
       <Separator />
       {/* Equipements */}
       <SubMenu
@@ -350,15 +334,21 @@ const MenuResponsableMaintenance = () => {
       >
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/"} />}
         >
           Liste Equipements
         </MenuItem>
         <MenuItem
           icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
+          component={<Link to={"/equipement/bon-approvisionnement"} />}
         >
           Demande d'approvisionnement
+        </MenuItem>
+        <MenuItem
+          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
+          component={<Link to={"/equipement/piece-rechange"} />}
+        >
+          Liste Piéces de rechanges
         </MenuItem>
       </SubMenu>
       {/* /Equipements */}
@@ -389,42 +379,6 @@ const MenuAgentMaintenance = () => {
         </MenuItem>
       </SubMenu>
       {/* /Mainttenance */}
-      <Separator />
-      {/* Notification */}
-      <SubMenu
-        label="Notifications"
-        icon={<BinaryIcon size={20} strokeWidth={2.4} />}
-        className="rounded-full text-xs font-semibold text-slate-700"
-      >
-        <MenuItem
-          icon={<CalendarCheckIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
-        >
-          Demande de travail
-        </MenuItem>
-      </SubMenu>
-      {/* /Notification */}
-      <Separator />
-      {/* Equipements */}
-      <SubMenu
-        label="Equipements"
-        icon={<ShoppingCartIcon size={20} strokeWidth={2.4} />}
-        className="rounded-full text-xs font-semibold text-slate-700"
-      >
-        <MenuItem
-          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
-        >
-          Liste Equipements
-        </MenuItem>
-        <MenuItem
-          icon={<CalendarSearchIcon size={20} strokeWidth={2.4} />}
-          component={<Link to={""} />}
-        >
-          Demande d'approvisionnement
-        </MenuItem>
-      </SubMenu>
-      {/* /Equipements */}
     </Menu>
   );
 };

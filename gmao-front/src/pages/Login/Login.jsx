@@ -30,6 +30,7 @@ const Login = () => {
       const responseJson = await response.json();
       if (responseJson.token) {
         localStorage.setItem("Token", responseJson.token);
+        localStorage.setItem("UserType", responseJson.UserType);
         notify(false, "Logged In");
         navigate(0);
       }

@@ -1,3 +1,5 @@
 from .BonTravailViewSet import BonTravailViewSet
 from .DemandeInterventionViewSet import DemandeInterventionViewSet
 from .EquipementViewSet import EquipementViewSet
+from .BonApprovisionnementViewSet import BonApprovisionnementViewSet
+from .PieceRechangeViewSet import PieceRechangeViewSet

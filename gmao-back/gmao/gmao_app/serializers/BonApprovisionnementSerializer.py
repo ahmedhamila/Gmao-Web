@@ -1,19 +1,23 @@
 from rest_framework import serializers
 from ..models import BonApprovisionnement
+from .PieceRechangeSerializer import PieceRechangeSerializer
 
 class BonApprovisionnementSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
+    pieces_rechange = PieceRechangeSerializer(many=True, read_only=True)
+    responsable_maintenance = serializers.SlugRelatedField(
         many=False,
         read_only=True,
-        slug_field='username'
+        slug_field='mail'
      )
-    image = serializers.ImageField(max_length = False,allow_empty_file=False,allow_null=False,use_url=True,required=False)
-
-    #registered_courses = CoursSerializer("registered_courses",many=True,read_only=True)
+    magasinier = serializers.SlugRelatedField(
+        many=False,
+        read_only=True,
+        slug_field='mail'
+     )
     class Meta:
-        model=BonApprovisionnement
-        fields=["id","first_name","last_name","date_of_birth","mail","phone_number","image","user"]
-        depth = 1
-        #read_only_fields = ('registered_courses', )
-        #extra_kwargs = {'registered_courses': {'read_only': True},}
-    
+        model = BonApprovisionnement
+        fields = ['id','responsable_maintenance', 'magasinier', 'date_liberation', 'description', 'pieces_rechange']
+        read_only_fields = ('pieces_rechange', )
+        extra_kwargs = {
+            'pieces_rechange': {'read_only': True},
+        }

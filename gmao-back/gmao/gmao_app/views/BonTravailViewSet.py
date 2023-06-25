@@ -3,14 +3,20 @@ from ..serializers import BonTravailSerializer
 from ..models import BonTravail
 from gmao_users.models import AgentMaintenance
 from gmao_users.models import ResponsableMaintenance
+from gmao_users.models import Administrateur
+from gmao_users.models import Magasinier
+from gmao_users.models import ResponsableChaineProduction
+from gmao_users.models import ResponsableProduction
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
-
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
+
 class BonTravailViewSet(viewsets.ModelViewSet):
     serializer_class=BonTravailSerializer
     queryset=BonTravail.objects.all()
     permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
 
 
     def perform_create(self, serializer):
@@ -48,3 +54,31 @@ class BonTravailViewSet(viewsets.ModelViewSet):
         self.perform_update(serializer)
 
         return Response(serializer.data)
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        print(user)
+        if user.is_authenticated:
+            userType=''
+            isAdministrateur = Administrateur.objects.filter(mail=user)
+            isAgentMaintenance = AgentMaintenance.objects.filter(mail=user)
+            isResponsableChaineProduction = ResponsableChaineProduction.objects.filter(mail=user)
+            isResponsableMaintenance = ResponsableMaintenance.objects.filter(mail=user)
+            isResponsableProduction = ResponsableProduction.objects.filter(mail=user)
+            if isAdministrateur :
+                userType='Administrateur'
+                self.queryset = BonTravail.objects.all()
+            elif isAgentMaintenance :
+                userType='AgentMaintenance'
+                self.queryset = BonTravail.objects.filter(agent_maintenance=isAgentMaintenance.values()[0]['id'])
+            
+            elif isResponsableChaineProduction :
+                userType='ResponsableChaineProduction'
+                self.queryset = BonTravail.objects.all()
+            elif isResponsableMaintenance :
+                userType='ResponsableMaintenance'
+                self.queryset = BonTravail.objects.filter(responsable_maintenance=isResponsableMaintenance.values()[0]['id'])
+            elif isResponsableProduction :
+                userType='ResponsableProduction'
+                self.queryset = BonTravail.objects.all()
+
+        return super().list(request, *args, **kwargs)

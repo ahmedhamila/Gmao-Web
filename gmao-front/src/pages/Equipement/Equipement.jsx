@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { SERVER_API_CONFIG } from "./../../Configurations";
+import { SERVER_API_CONFIG } from "../../Configurations";
 import { Grid, Typography } from "@mui/material";
 import { Button } from "@/components/ui/Button";
 import IconButton from "@mui/material/IconButton";
@@ -10,12 +10,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Image } from "mui-image";
 import imageUrl from "@/assets/bon-travail.jpg";
 import toast, { Toaster } from "react-hot-toast";
-import BonTravailPopup from "./BonTravailPopup";
-import AddBonTravailPopup from "./AddBonTravailPopup";
+import EquipementPopup from "./EquipementPopup";
+import AddEquipementPopup from "./AddEquipementPopup";
 import { useSelector } from "react-redux";
 const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
 
-export default function BonTravail({ editMode }) {
+export default function Equipement({ editMode }) {
   const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function BonTravail({ editMode }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${URL}/gmao/BonTravail`, {
+      const response = await fetch(`${URL}/gmao/Equipement`, {
         headers: { Authorization: `Token ${token}` },
       });
       const data = await response.json();
@@ -45,16 +45,16 @@ export default function BonTravail({ editMode }) {
     }
   };
 
-  const handleAddBonTravail = (newBonTravail) => {
+  const handleAddEquipement = (newEquipement) => {
     // Update the bonTravaux state by adding the new bon de travail
-    setRows((prevBonTravaux) => [...prevBonTravaux, newBonTravail]);
+    setRows((prevBonTravaux) => [...prevBonTravaux, newEquipement]);
   };
 
-  const handleUpdateRecord = (BonTravailId, updatedData) => {
+  const handleUpdateRecord = (EquipementId, updatedData) => {
     console.log("updatedData : ", updatedData);
     setRows((prevRows) => {
       const updatedRows = prevRows.map((row) => {
-        if (row.id === BonTravailId) {
+        if (row.id === EquipementId) {
           return {
             ...row,
             ...updatedData,
@@ -81,8 +81,8 @@ export default function BonTravail({ editMode }) {
     setPopupOpen(true);
   };
 
-  const deleteBonTravail = async (BonTravailId) => {
-    const response = await fetch(`${URL}/gmao/BonTravail/${BonTravailId}`, {
+  const deleteEquipement = async (EquipementId) => {
+    const response = await fetch(`${URL}/gmao/Equipement/${EquipementId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -90,8 +90,8 @@ export default function BonTravail({ editMode }) {
     });
 
     if (response.ok) {
-      notify(false, "Bon de Travail deleted Successfully");
-      setRows((prevRows) => prevRows.filter((row) => row.id !== BonTravailId));
+      notify(false, "Equipement deleted Successfully");
+      setRows((prevRows) => prevRows.filter((row) => row.id !== EquipementId));
     } else {
       notify(false, "An error has occured while deleting !");
     }
@@ -99,7 +99,7 @@ export default function BonTravail({ editMode }) {
 
   const handleDelete = (id) => {
     console.log(`Delete action triggered for id: ${id}`);
-    deleteBonTravail(id);
+    deleteEquipement(id);
   };
   const handleDeleteSelected = () => {
     // Perform delete action for the selected rows
@@ -123,17 +123,10 @@ export default function BonTravail({ editMode }) {
   };
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "responsable_maintenance", headerName: "Responsable", width: 200 },
-    { field: "agent_maintenance", headerName: "Agent", width: 200 },
-    { field: "refDIM", headerName: "Ref DIM", width: 100 },
-    { field: "equipement", headerName: "Equipement", width: 120 },
-    { field: "description", headerName: "Description", width: 200 },
-    { field: "section", headerName: "Section", width: 100 },
-    { field: "date_liberation", headerName: "Date Liberation", width: 150 },
-    { field: "type", headerName: "Type", width: 100 },
-    { field: "frequence", headerName: "Frequence", width: 120 },
-    { field: "active", headerName: "Active", width: 100 },
-    { field: "status", headerName: "Status", width: 100 },
+    { field: "code", headerName: "Code", width: 200 },
+    { field: "date_fabrication", headerName: "Date de fabrication", width: 200 },
+    { field: "date_mise_en_marche", headerName: "Date de mise en marche", width: 200 },
+    { field: "type", headerName: "Type", width: 200 },
 
     {
       field: "actions",
@@ -208,7 +201,7 @@ export default function BonTravail({ editMode }) {
         >
           <Image
             src={imageUrl}
-            alt="Industrial Bon de Travail"
+            alt="Industrial Equipement"
             height="80%"
             width="80%"
             style={{ borderRadius: 16 }}
@@ -216,10 +209,10 @@ export default function BonTravail({ editMode }) {
         </Grid>
         <Grid container display="flex" flexDirection="column" gap="25px">
           <Typography variant="body1">
-            A Bon de Travail, also known as a Work Order, is a document used to
+            A Equipement, also known as a Work Order, is a document used to
             initiate and track maintenance or repair tasks in an industrial
             setting. It serves as a formal request to fix or maintain equipment
-            or machinery within a production cycle. The Bon de Travail contains
+            or machinery within a production cycle. The Equipement contains
             essential information such as the responsible maintenance personnel,
             equipment details, description of the task, expected completion
             date, and status. It plays a crucial role in ensuring the smooth
@@ -227,7 +220,7 @@ export default function BonTravail({ editMode }) {
           </Typography>
           {editMode && (
             <Button style={{ width: "100%" }} onClick={handleOpenDialog}>
-              Add Bon Travail
+              Add Equipement
             </Button>
           )}
         </Grid>
@@ -256,17 +249,17 @@ export default function BonTravail({ editMode }) {
           onRowSelectionModelChange={handleSelectionModelChange}
         />
       </Grid>
-      <BonTravailPopup
+      <EquipementPopup
         rowData={selectedRowData}
         open={popupOpen}
         isModification={isEditMode}
         onUpdateRecord={handleUpdateRecord}
         onClose={() => setPopupOpen(false)}
       />
-      <AddBonTravailPopup
+      <AddEquipementPopup
         open={addPopupOpen}
         onClose={handleCloseDialog}
-        onAddBonTravail={handleAddBonTravail}
+        onAddEquipement={handleAddEquipement}
       />
       <Toaster />
     </Grid>

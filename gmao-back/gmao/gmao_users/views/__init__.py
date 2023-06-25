@@ -1,2 +1,4 @@
 from .UserViewSet import UserViewSet
 from .AgentMaintenanceViewSet import AgentMaintenanceViewSet
+from .ResponsableMaintenanceViewSet import ResponsableMaintenanceViewSet
+from .MagasinierViewSet import MagasinierViewSet

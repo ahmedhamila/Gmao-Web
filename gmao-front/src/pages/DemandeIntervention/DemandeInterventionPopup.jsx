@@ -21,11 +21,11 @@ import { Image } from "mui-image";
 import imageUrl from "@/assets/bon-travail.jpg";
 import { Button } from "@/components/ui/Button";
 import toast, { Toaster } from "react-hot-toast";
-import { SERVER_API_CONFIG } from "./../../Configurations";
+import { SERVER_API_CONFIG } from "../../Configurations";
 import { useSelector } from "react-redux";
 const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
 
-const BonTravailPopup = ({
+const DemandeInterventionPopup = ({
   rowData,
   open,
   onClose,
@@ -33,24 +33,21 @@ const BonTravailPopup = ({
   onUpdateRecord,
 }) => {
   const [modifiedData, setModifiedData] = useState({});
-  const [agentMaintenanceOptions, setAgentMaintenanceOptions] = useState([]);
+  const [responsableMaintenanceOptions, setResponsableMaintenanceOptions] = useState([]);
   const [equipementOptions, setEquipementOptions] = useState([]);
-  const [demandeInterventionOptions, setDemandeInterventionOptions] = useState(
-    []
-  );
   const { id } = useSelector((state) => state.user);
   const notify = (error, msg) => {
     if (error) toast.error(msg);
     else toast.success(msg);
   };
 
-  const fetchAgentMaintenanceOptions = async () => {
-    const response = await fetch(`${URL}/users/AgentMaintenance`);
+  const fetchResponsableMaintenanceOptions = async () => {
+    const response = await fetch(`${URL}/users/ResponsableMaintenance`);
     if (response.ok) {
       const data = await response.json();
-      setAgentMaintenanceOptions(data);
+      setResponsableMaintenanceOptions(data);
     } else {
-      notify(true, "Failed to fetch agent maintenance options");
+      notify(true, "Failed to fetch Responsable Maintenance options");
     }
   };
 
@@ -64,20 +61,10 @@ const BonTravailPopup = ({
     }
   };
 
-  const fetchDemandeInterventionOptions = async () => {
-    const response = await fetch(`${URL}/gmao/DemandeIntervention`);
-    if (response.ok) {
-      const data = await response.json();
-      setDemandeInterventionOptions(data);
-    } else {
-      notify(true, "Failed to fetch demande intervention options");
-    }
-  };
 
   useEffect(() => {
-    fetchAgentMaintenanceOptions();
+    fetchResponsableMaintenanceOptions();
     fetchEquipementOptions();
-    fetchDemandeInterventionOptions();
     console.log("RowData", rowData);
     setModifiedData(rowData);
   }, [rowData]);
@@ -90,35 +77,35 @@ const BonTravailPopup = ({
     }));
   };
 
-  const updateBonTravail = async (BonTravailId, updatedData) => {
-    const response = await fetch(`${URL}/gmao/BonTravail/${BonTravailId}/`, {
+  const updateDemandeIntervention = async (DemandeInterventionId, updatedData) => {
+    const response = await fetch(`${URL}/gmao/DemandeIntervention/${DemandeInterventionId}/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...updatedData, responsable_maintenance: id }),
+      body: JSON.stringify({ ...updatedData, responsable_chaine_production: id }),
     });
 
     if (response.ok) {
-      notify(false, "Bon de Travail updated successfully");
+      notify(false, "Demande d'Intervention updated successfully");
       // Call the callback function to update the record in the parent component
-      onUpdateRecord(BonTravailId, updatedData);
+      onUpdateRecord(DemandeInterventionId, updatedData);
     } else {
       notify(
         true,
-        "An error has occurred while updating (select an agent de maintenance )!"
+        "An error has occurred while updating (select a responsable de maintenance )!"
       );
     }
   };
 
   const handleUpdate = () => {
     console.log(modifiedData); // Log the current modifiedData
-    updateBonTravail(rowData.id, modifiedData);
+    updateDemandeIntervention(rowData.id, modifiedData);
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
-      <DialogTitle>Bon de Travail Details</DialogTitle>
+      <DialogTitle>Demande d'Intervention Details</DialogTitle>
       <DialogContent>
         <Grid container display="flex" gap={2}>
           <Grid item>
@@ -141,20 +128,20 @@ const BonTravailPopup = ({
                         scope="row"
                         sx={{ fontWeight: "bold" }}
                       >
-                        agent_maintenance
+                        responsable_maintenance
                       </TableCell>
                       <TableCell>
                         <Select
-                          value={modifiedData.agent_maintenance}
+                          value={modifiedData.responsable_maintenance}
                           onChange={(e) =>
                             handleFieldChange(
-                              "agent_maintenance",
+                              "responsable_maintenance",
                               e.target.value
                             )
                           }
                           sx={{ width: "100%" }}
                         >
-                          {agentMaintenanceOptions.map((option) => (
+                          {responsableMaintenanceOptions.map((option) => (
                             <MenuItem key={option.id} value={option.id}>
                               {option.mail}
                             </MenuItem>
@@ -181,33 +168,6 @@ const BonTravailPopup = ({
                           {equipementOptions.map((option) => (
                             <MenuItem key={option.id} value={option.id}>
                               {option.code}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        refDIM
-                      </TableCell>
-                      <TableCell>
-                        <Select
-                          value={modifiedData.refDIM || ""}
-                          onChange={(e) =>
-                            handleFieldChange("refDIM", e.target.value)
-                          }
-                          sx={{ width: "100%" }}
-                        >
-                          {demandeInterventionOptions.map((option) => (
-                            <MenuItem key={option.id} value={option.id}>
-                              {option.responsable_maintenance +
-                                "(" +
-                                option.id +
-                                ")"}
                             </MenuItem>
                           ))}
                         </Select>
@@ -256,7 +216,7 @@ const BonTravailPopup = ({
                         scope="row"
                         sx={{ fontWeight: "bold" }}
                       >
-                        type
+                        motif
                       </TableCell>
                       <TableCell>
                         <Select
@@ -266,45 +226,9 @@ const BonTravailPopup = ({
                           }
                           sx={{ width: "100%" }}
                         >
-                          <MenuItem value="CO">Correctif</MenuItem>
-                          <MenuItem value="PR">Preventif</MenuItem>
+                          <MenuItem value="AC">Correctif</MenuItem>
+                          <MenuItem value="AN">Preventif</MenuItem>
                         </Select>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        frequence
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          type="number"
-                          value={modifiedData.frequence || 0}
-                          onChange={(e) =>
-                            handleFieldChange("frequence", e.target.value)
-                          }
-                          sx={{ width: "100%" }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        active
-                      </TableCell>
-                      <TableCell>
-                        <Checkbox
-                          checked={modifiedData.active}
-                          onChange={(e) =>
-                            handleFieldChange("active", e.target.checked)
-                          }
-                        />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -339,4 +263,4 @@ const BonTravailPopup = ({
   );
 };
 
-export default BonTravailPopup;
+export default DemandeInterventionPopup;
