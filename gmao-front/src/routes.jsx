@@ -11,6 +11,7 @@ import DemandeIntervention from "./pages/DemandeIntervention/DemandeIntervention
 import Equipement from "./pages/Equipement/Equipement";
 import PieceRechange from "./pages/PieceRechange/PieceRechange";
 import BonApprovisionnement from "./pages/BonApprovisionnement/BonApprovisionnement";
+import RedirectBonTravail from "./pages/BonTravail/RedirectBonTravail";
 const ResponsableMaintenanceChildren = [
   {
     index: true,
@@ -26,6 +27,10 @@ const ResponsableMaintenanceChildren = [
       {
         path: "demande-intervention",
         element: <DemandeIntervention editMode={false} />,
+      },
+      {
+        path: "redirect-bon",
+        element: <RedirectBonTravail />,
       },
     ],
   },

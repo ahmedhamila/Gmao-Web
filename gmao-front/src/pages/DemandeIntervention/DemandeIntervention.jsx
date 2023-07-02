@@ -7,14 +7,19 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import ForwardIcon from "@mui/icons-material/Forward";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Image } from "mui-image";
 import imageUrl from "@/assets/bon-travail.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import DemandeInterventionPopup from "./DemandeInterventionPopup";
 import AddDemandeInterventionPopup from "./AddDemandeInterventionPopup";
+import { updateSelectedDIM } from "@/redux/features/selectedDIMSlice";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
+import { useNavigate } from "react-router-dom";
 
+const URL = `${SERVER_API_CONFIG.PROTOCOL}://${SERVER_API_CONFIG.HOST_NAME}:${SERVER_API_CONFIG.PORT}`;
 export default function DemandeIntervention({ editMode }) {
   const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -22,7 +27,9 @@ export default function DemandeIntervention({ editMode }) {
   const [addPopupOpen, setAddPopupOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
-  const { token } = useSelector((state) => state.user);
+  const { token, userType } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const notify = (error, msg) => {
     if (error) toast.error(msg);
     else toast.success(msg);
@@ -82,16 +89,21 @@ export default function DemandeIntervention({ editMode }) {
   };
 
   const deleteDemandeIntervention = async (DemandeInterventionId) => {
-    const response = await fetch(`${URL}/gmao/DemandeIntervention/${DemandeInterventionId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/gmao/DemandeIntervention/${DemandeInterventionId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.ok) {
       notify(false, "Demande d'Intervention deleted Successfully");
-      setRows((prevRows) => prevRows.filter((row) => row.id !== DemandeInterventionId));
+      setRows((prevRows) =>
+        prevRows.filter((row) => row.id !== DemandeInterventionId)
+      );
     } else {
       notify(false, "An error has occured while deleting !");
     }
@@ -109,6 +121,18 @@ export default function DemandeIntervention({ editMode }) {
       handleDelete(bonId);
     });
   };
+
+  const handleRedirectBonTravail = (row) => {
+    dispatch(
+      updateSelectedDIM({
+        refDIM: row.id,
+        equipement: row.equipement,
+        section: row.section,
+      })
+    );
+    navigate("/maintenance/redirect-bon");
+  };
+
   const handleSelectionModelChange = (params) => {
     console.log(params);
     setSelectedRows(params);
@@ -123,8 +147,16 @@ export default function DemandeIntervention({ editMode }) {
   };
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "responsable_chaine_production", headerName: "Responsable Chaine Production", width: 200 },
-    { field: "responsable_maintenance", headerName: "Responsable Maintenance", width: 200 },
+    {
+      field: "responsable_chaine_production",
+      headerName: "Responsable Chaine Production",
+      width: 200,
+    },
+    {
+      field: "responsable_maintenance",
+      headerName: "Responsable Maintenance",
+      width: 200,
+    },
     { field: "equipement", headerName: "Equipement", width: 120 },
     { field: "description", headerName: "Description", width: 200 },
     { field: "section", headerName: "Section", width: 100 },
@@ -157,6 +189,20 @@ export default function DemandeIntervention({ editMode }) {
               </IconButton>
             </Fragment>
           )}
+
+          {userType === "ResponsableMaintenance" &&
+            (params.row.has_bon_travail ? (
+              <IconButton disabled aria-label="delete" color="green">
+                <TaskAltIcon />
+              </IconButton>
+            ) : (
+              <IconButton
+                aria-label="delete"
+                onClick={() => handleRedirectBonTravail(params.row)}
+              >
+                <ForwardIcon />
+              </IconButton>
+            ))}
         </Grid>
       ),
     },
@@ -213,14 +259,15 @@ export default function DemandeIntervention({ editMode }) {
         </Grid>
         <Grid container display="flex" flexDirection="column" gap="25px">
           <Typography variant="body1">
-            A Demande d'Intervention, also known as a Work Order, is a document used to
-            initiate and track maintenance or repair tasks in an industrial
-            setting. It serves as a formal request to fix or maintain equipment
-            or machinery within a production cycle. The Demande d'Intervention contains
-            essential information such as the responsible maintenance personnel,
-            equipment details, description of the task, expected completion
-            date, and status. It plays a crucial role in ensuring the smooth
-            operation and efficiency of the production process.
+            A Demande d'Intervention, also known as a Work Order, is a document
+            used to initiate and track maintenance or repair tasks in an
+            industrial setting. It serves as a formal request to fix or maintain
+            equipment or machinery within a production cycle. The Demande
+            d'Intervention contains essential information such as the
+            responsible maintenance personnel, equipment details, description of
+            the task, expected completion date, and status. It plays a crucial
+            role in ensuring the smooth operation and efficiency of the
+            production process.
           </Typography>
           {editMode && (
             <Button style={{ width: "100%" }} onClick={handleOpenDialog}>

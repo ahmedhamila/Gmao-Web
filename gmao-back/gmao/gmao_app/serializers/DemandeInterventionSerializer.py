@@ -12,9 +12,15 @@ class DemandeInterventionSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='mail'
      )
-    
+    has_bon_travail = serializers.SerializerMethodField()
+
+    def get_has_bon_travail(self, obj):
+        try:
+            return obj.bontravail is not None
+        except DemandeIntervention.bontravail.RelatedObjectDoesNotExist:
+            return False
     class Meta:
         model=DemandeIntervention
-        fields=["id","responsable_chaine_production","responsable_maintenance","equipement","description","section","date_liberation","motif","status"]
+        fields=["id","responsable_chaine_production","responsable_maintenance","equipement","description","section","date_liberation","motif","status","has_bon_travail"]
         #depth = 1
     
